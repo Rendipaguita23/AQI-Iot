@@ -12,7 +12,7 @@ st.markdown("<center><h1>Air Quality Monitoring Berbasis Iot</h1></center>", uns
 st.markdown("<center><h2>PLTU Banten 3 Lontar</h2></center>", unsafe_allow_html=True)
 
 # Variabel-variabel koneksi MQTT
-broker = "test.mosquitto.org"
+broker = "mqtt-dashboard.com"
 port = 1883
 topic_temp = "lontar/temp"
 topic_humd = "lontar/humd"
