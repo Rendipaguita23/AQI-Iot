@@ -2,19 +2,22 @@ import streamlit as st
 import paho.mqtt.client as mqtt
 from datetime import datetime
 import plotly.graph_objs as go
+import pytz
 from PIL import Image
 
-image = Image.open('AQI.png')
-st.image(image, width=700)
+image = Image.open('AQI.png') #Load gambar dan menampilkannya pada web
+st.image(image, width=700) #ukuran gambarcha
 
+#Program HTML
 # Inisialisasi aplikasi Streamlit
-st.markdown("<center><h1>Air Quality Monitoring Berbasis Iot</h1></center>", unsafe_allow_html=True)
-st.markdown("<center><h2>PLTU Banten 3 Lontar</h2></center>", unsafe_allow_html=True)
+st.markdown("<center><h1>Air Quality Monitoring Berbasis Iot</h1></center>", unsafe_allow_html=True)#Judul
+st.markdown("<center><h2>PLTU Banten 3 Lontar</h2></center>", unsafe_allow_html=True)#Judul 2
 
+#Bahasa Python
 # Variabel-variabel koneksi MQTT
-broker = "test.mosquitto.org"
-port = 1883
-topic_temp = "lontar/temp"
+broker = "test.mosquitto.org" #Mendeklarasi Variable MQTT
+port = 1883 #port khusus iot pada web mosquito dan alamat ini paling mudah di akses 
+topic_temp = "lontar/temp" 
 topic_humd = "lontar/humd"
 topic_co = "lontar/co"
 topic_so2 = "lontar/so2" 
@@ -25,8 +28,8 @@ topic_pm10 = "lontar/pm10"
 mqtt_connected = False  # Variabel status koneksi MQTT
 
 # Buat wadah kosong untuk output nilai dan grafik
-output_container1 = st.empty()
-chart_container1 = st.empty()
+output_container1 = st.empty() #container adalah sebuah template kotak dari sebuah output pada streamlit
+chart_container1 = st.empty()  
 
 output_container2 = st.empty()
 chart_container2 = st.empty()
@@ -58,7 +61,7 @@ data5 = []  # Simpan data dari topik pertama dalam list
 data6 = []  # Simpan data dari topik kedua dalam list
 data7 = []  # Simpan data dari topik pertama dalam list
 data8 = []  # Simpan data dari topik kedua dalam list
-max_data_points = 1440  # Batasi jumlah data yang ditampilkan pada grafik (1 hari x 60 menit)
+max_data_points = 1440  # Batasi jumlah data yang ditampilkan pada grafik (24 menit)
 
 # Fungsi yang akan dipanggil saat koneksi MQTT berhasil
 def on_connect(client, userdata, flags, rc):
@@ -76,9 +79,9 @@ def on_connect(client, userdata, flags, rc):
 # Fungsi yang akan dipanggil saat pesan MQTT diterima
 def on_message(client, userdata, msg):
     try:
-        sensor_data = msg.payload.decode("utf-8")  # Parsing pesan MQTT
+        sensor_data = msg.payload.decode("utf-8")  # Parsing pesan MQTT //isi pesan Iot sensor
         if msg.topic == topic_temp:
-            update_output(output_container1, sensor_data, "°C", "Suhu")  # Perbarui output nilai untuk topik pertama
+            update_output(output_container1, sensor_data, "°C", "Temperatur")  # Perbarui output nilai untuk topik pertama
             update_line_chart(chart_container1, data1, sensor_data)  # Perbarui grafik garis untuk topik pertama
         elif msg.topic == topic_humd:
             update_output(output_container2, sensor_data, "%", "Humadity")  # Perbarui output nilai untuk topik kedua
@@ -107,11 +110,11 @@ def on_message(client, userdata, msg):
 
 # Fungsi untuk memperbarui output nilai
 def update_output(output_container, sensor_data, unit, topic_label):
-    output_container.metric(topic_label, f"{sensor_data} {unit}")
+    output_container.metric(topic_label, f"{sensor_data} {unit}")#metric merupakan template dari streamlit untuk menampilkan nama sensor dan nilainya beserta satuan.
 
 # Fungsi untuk memperbarui data pada grafik garis
 def update_line_chart(chart_container, data, sensor_data):
-    current_time = datetime.now().strftime("%H:%M:%S")
+    current_time = datetime.now(pytz.timezone("Asia/Jakarta")).strftime("%H:%M:%S")
     data.append((current_time, sensor_data))
     
     # Proses data waktu untuk sumbu x
