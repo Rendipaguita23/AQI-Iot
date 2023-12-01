@@ -15,7 +15,7 @@ st.markdown("<center><h2>PLTU Banten 3 Lontar</h2></center>", unsafe_allow_html=
 
 #Bahasa Python
 # Variabel-variabel koneksi MQTT
-broker = "test.mosquitto.org" #Mendeklarasi Variable MQTT
+broker = "mqtt-dashboard.com" #Mendeklarasi Variable MQTT
 port = 1883 #port khusus iot pada web mosquito dan alamat ini paling mudah di akses 
 topic_temp = "lontar/temp" 
 topic_humd = "lontar/humd"
